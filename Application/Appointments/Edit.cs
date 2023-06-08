@@ -5,20 +5,20 @@ using FluentValidation;
 using MediatR;
 using Persistence;
 
-namespace Application.Notes
+namespace Application.Appointments
 {
     public class Edit
     {
         public class Command : IRequest<Result<Unit>>
         {
-            public Note Note { get; set; }
+            public Appointment Appointment { get; set; }
         }
 
         public class CommandValidator : AbstractValidator<Command>
         {
             public CommandValidator()
             {
-                RuleFor(x => x.Note).SetValidator(new NoteValidator());
+                RuleFor(x => x.Appointment).SetValidator(new AppointmentValidator());
             }
         }
 
@@ -35,15 +35,15 @@ namespace Application.Notes
 
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var noteNote = await _context.Notes.FindAsync(request.Note.Id);
+                var appointmentAppointment = await _context.Appointments.FindAsync(request.Appointment.Id);
 
-                if (noteNote == null) return null;
+                if (appointmentAppointment == null) return null;
 
-                _mapper.Map(request.Note, noteNote);
+                _mapper.Map(request.Appointment, appointmentAppointment);
 
                 var result = await _context.SaveChangesAsync() > 0;
 
-                if (!result) return Result<Unit>.Failure("Failed to update noteNote");
+                if (!result) return Result<Unit>.Failure("Failed to update appointmentAppointment");
 
                 return Result<Unit>.Success(Unit.Value);
             }

@@ -2,7 +2,7 @@ using Application.Core;
 using MediatR;
 using Persistence;
 
-namespace Application.Notes
+namespace Application.Appointments
 {
     public class Delete
     {
@@ -22,15 +22,15 @@ namespace Application.Notes
 
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var note = await _context.Notes.FindAsync(request.Id);
+                var appointment = await _context.Appointments.FindAsync(request.Id);
 
-                if (note == null) return null;
+                if (appointment == null) return null;
 
-                _context.Remove(note);
+                _context.Remove(appointment);
 
                 var result = await _context.SaveChangesAsync() > 0;
 
-                if (!result) return Result<Unit>.Failure("Failed to delete the note");
+                if (!result) return Result<Unit>.Failure("Failed to delete the appointment");
 
                 return Result<Unit>.Success(Unit.Value);
             }

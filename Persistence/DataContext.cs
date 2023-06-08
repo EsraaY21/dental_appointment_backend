@@ -13,6 +13,9 @@ namespace Persistence
         {
         }
 
-        public DbSet<Note> Notes {get;set;}
+        public DbSet<Note> Notes { get; set; }
+        public DbSet<Appointment> Appointments { get; set; }
+        // public DbSet<Service> Services { get; set; }
+        // public DbSet<Doctor> Doctors { get; set; }
     }
 }

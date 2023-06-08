@@ -4,13 +4,13 @@ using FluentValidation;
 using MediatR;
 using Persistence;
 
-namespace Application.Notes
+namespace Application.Appointments
 {
     public class Create
     {
         public class Command : IRequest<Result<Unit>>
         {
-            public Note Note { get; set; }
+            public Appointment Appointment { get; set; }
         }
 
         public class Handler : IRequestHandler<Command, Result<Unit>>
@@ -26,17 +26,17 @@ namespace Application.Notes
             {
                 public CommandValidator()
                 {
-                    RuleFor(x => x.Note).SetValidator(new NoteValidator());
+                    RuleFor(x => x.Appointment).SetValidator(new AppointmentValidator());
                 }
             }
 
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
-                _context.Notes.Add(request.Note);
+                _context.Appointments.Add(request.Appointment);
 
                 var result = await _context.SaveChangesAsync() > 0;
 
-                if (!result) return Result<Unit>.Failure("Failed to create note");
+                if (!result) return Result<Unit>.Failure("Failed to create appointment");
 
                 return Result<Unit>.Success(Unit.Value);
             }
