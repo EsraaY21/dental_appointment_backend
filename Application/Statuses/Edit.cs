@@ -6,20 +6,20 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
-namespace Application.Notes
+namespace Application.Statuses
 {
     public class Edit
     {
         public class Command : IRequest<Result<Unit>>
         {
-            public Note Note { get; set; }
+            public Status Status { get; set; }
         }
 
         public class CommandValidator : AbstractValidator<Command>
         {
             public CommandValidator()
             {
-                RuleFor(x => x.Note).SetValidator(new NoteValidator());
+                RuleFor(x => x.Status).SetValidator(new StatusValidator());
             }
         }
 
@@ -36,16 +36,16 @@ namespace Application.Notes
 
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var note = await _context.Notes.Where(x => x.Id == request.Note.Id).FirstOrDefaultAsync();
+                var status = await _context.Statuses.Where(x => x.Id == request.Status.Id).FirstOrDefaultAsync();
 
-                if (note == null) return null;
+                if (status == null) return null;
 
-                _mapper.Map(request.Note, note);
+                _mapper.Map(request.Status, status);
 
-                var f = _context.Notes.Update(note);
+                var f = _context.Statuses.Update(status);
                 var result = await _context.SaveChangesAsync() > 0;
 
-                if (!result) return Result<Unit>.Failure("Failed to update note");
+                if (!result) return Result<Unit>.Failure("Failed to update status");
 
                 return Result<Unit>.Success(Unit.Value);
             }

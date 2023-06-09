@@ -9,6 +9,7 @@ namespace Application.Core
         {
             CreateMap<Note, Note>();
             CreateMap<Appointment, Appointment>();
+            CreateMap<Status, Status>();
         }
     }
 }
