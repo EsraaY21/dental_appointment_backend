@@ -35,15 +35,15 @@ namespace Application.Notes
 
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var noteNote = await _context.Notes.FindAsync(request.Note.Id);
+                var note = await _context.Notes.FindAsync(request.Note.Id);
 
-                if (noteNote == null) return null;
+                if (note == null) return null;
 
-                _mapper.Map(request.Note, noteNote);
+                _mapper.Map(request.Note, note);
 
                 var result = await _context.SaveChangesAsync() > 0;
 
-                if (!result) return Result<Unit>.Failure("Failed to update noteNote");
+                if (!result) return Result<Unit>.Failure("Failed to update note");
 
                 return Result<Unit>.Success(Unit.Value);
             }

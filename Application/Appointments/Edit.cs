@@ -3,6 +3,7 @@ using AutoMapper;
 using Domain;
 using FluentValidation;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Persistence;
 
 namespace Application.Appointments
@@ -35,15 +36,16 @@ namespace Application.Appointments
 
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var appointmentAppointment = await _context.Appointments.FindAsync(request.Appointment.Id);
+                var appointment = await _context.Appointments.Where(x=>x.Id == request.Appointment.Id).FirstOrDefaultAsync();
 
-                if (appointmentAppointment == null) return null;
+                if (appointment == null) return null;
 
-                _mapper.Map(request.Appointment, appointmentAppointment);
+                _mapper.Map(request.Appointment, appointment);
 
+                var f = _context.Appointments.Update(appointment);
                 var result = await _context.SaveChangesAsync() > 0;
 
-                if (!result) return Result<Unit>.Failure("Failed to update appointmentAppointment");
+                if (!result) return Result<Unit>.Failure("Failed to update appointment");
 
                 return Result<Unit>.Success(Unit.Value);
             }

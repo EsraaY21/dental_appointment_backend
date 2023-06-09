@@ -10,6 +10,7 @@ namespace Application.Appointments
             RuleFor(x => x.Patient).NotEmpty();
             RuleFor(x => x.Doctor).NotEmpty();
             RuleFor(x => x.Service).NotEmpty();
+            RuleFor(x => x.Day).NotEmpty();
         }
     }
 }

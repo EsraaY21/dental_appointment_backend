@@ -8,6 +8,7 @@ namespace Application.Core
         public MappingProfiles()
         {
             CreateMap<Note, Note>();
+            CreateMap<Appointment, Appointment>();
         }
     }
 }
